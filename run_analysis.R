@@ -1,6 +1,4 @@
-#install.packages("psych")
-#library(psych)
-
+#read all the datasets of training and test
 test_is_bodyaccx<-read.table("./UCI HAR Dataset/test/Inertial Signals/body_acc_x_test.txt")
 test_is_bodyaccy<-read.table("./UCI HAR Dataset/test/Inertial Signals/body_acc_y_test.txt")
 test_is_bodyaccz<-read.table("./UCI HAR Dataset/test/Inertial Signals/body_acc_z_test.txt")
@@ -28,19 +26,28 @@ train_subject_train<-read.table("./UCI HAR Dataset/train/subject_train.txt")
 train_x_train<-read.table("./UCI HAR Dataset/train/X_train.txt")
 train_y_train<-read.table("./UCI HAR Dataset/train/y_train.txt")
 
+#merge all the datasets
+is_bodyaccx<-rbind(test_is_bodyaccx,train_is_bodyaccx)
+is_bodyaccy<-rbind(test_is_bodyaccy,train_is_bodyaccy)
+is_bodyaccz<-rbind(test_is_bodyaccz,train_is_bodyaccz)
+is_bodygyrox<-rbind(test_is_bodygyrox,train_is_bodygyrox)
+is_bodygyroy<-rbind(test_is_bodygyroy,train_is_bodygyroy)
+is_bodygyroz<-rbind(test_is_bodygyroz,train_is_bodygyroz)
+is_totalaccx<-rbind(test_is_totalaccx,train_is_totalaccx)
+is_totalaccy<-rbind(test_is_totalaccy,train_is_totalaccy)
+is_totalaccz<-rbind(test_is_totalaccz,train_is_totalaccz)
+subject<-rbind(test_subject_test,train_subject_train)
+x<-rbind(test_x_test,train_x_train)
+y<-rbind(test_y_test,train_y_train)
 
-is_bodyaccx<-merge(test_is_bodyaccx,train_is_bodyaccx,all=T)
-is_bodyaccy<-merge(test_is_bodyaccy,train_is_bodyaccy,all=T)
-is_bodyaccz<-merge(test_is_bodyaccz,train_is_bodyaccz,all=T)
-is_bodygyrox<-merge(test_is_bodygyrox,train_is_bodygyrox,all=T)
-is_bodygyroy<-merge(test_is_bodygyroy,train_is_bodygyroy,all=T)
-is_bodygyroz<-merge(test_is_bodygyroz,train_is_bodygyroz,all=T)
-is_totalaccx<-merge(test_is_totalaccx,train_is_totalaccx,all=T)
-is_totalaccy<-merge(test_is_totalaccy,train_is_totalaccy,all=T)
-is_totalaccz<-merge(test_is_totalaccz,train_is_totalaccz,all=T)
-subject<-merge(test_subject_test,train_subject_train,all=T)
-x<-merge(test_x_test,train_x_train,all=T)
-y<-merge(test_y_test,train_y_train,all=T)
+#Uses descriptive activity names to name the activities in the data set
+y$activityname<-ifelse(y$V1==1,"WALKING",ifelse(y$V1==2,"WALKING_UPSTAIRS",ifelse(y$V1==3,"WALKING_DOWNSTAIRS",ifelse(y$V1==4,"SITTING",ifelse(y$V1==5,"STANDING",ifelse(y$V1==6,"LAYING","NOTHING"))))))
+
+
+#Extracts only the measurements on the mean and standard deviation for each measurement. 
+#this needs package psych
+#install.packages("psych")
+#library(psych)
 
 describe(is_bodyaccx)
 describe(is_bodyaccy)
@@ -55,3 +62,17 @@ describe(subject)
 describe(x)
 describe(y)
 
+
+is_bodyaccx2<-cbind(is_bodyaccx,x,y)
+is_bodyaccy2<-cbind(is_bodyaccy,x,y)
+is_bodyaccz2<-cbind(is_bodyaccz,x,y)
+is_bodygyrox2<-cbind(is_bodygyrox,x,y)
+is_bodygyroy2<-cbind(is_bodygyroy,x,y)
+is_bodygyroz2<-cbind(is_bodygyroz,x,y)
+is_totalaccx2<-cbind(is_totalaccx,x,y)
+is_totalaccy2<-cbind(is_totalaccy,x,y)
+is_totalaccz2<-cbind(is_totalaccz,x,y)
+subject2<-cbind(subject,x,y)
+
+
+#all_avg_per_act_per_sub<-ddply(is_bodyaccx2,.(x,y),numcolwise(mean))

@@ -43,6 +43,7 @@ y<-rbind(test_y_test,train_y_train)
 #Uses descriptive activity names to name the activities in the data set
 y$activityname<-ifelse(y$V1==1,"WALKING",ifelse(y$V1==2,"WALKING_UPSTAIRS",ifelse(y$V1==3,"WALKING_DOWNSTAIRS",ifelse(y$V1==4,"SITTING",ifelse(y$V1==5,"STANDING",ifelse(y$V1==6,"LAYING","NOTHING"))))))
 
+names(subject)<-"mysubject"
 
 #Extracts only the measurements on the mean and standard deviation for each measurement. 
 #this needs package psych
@@ -63,16 +64,30 @@ describe(x)
 describe(y)
 
 
-is_bodyaccx2<-cbind(is_bodyaccx,x,y)
-is_bodyaccy2<-cbind(is_bodyaccy,x,y)
-is_bodyaccz2<-cbind(is_bodyaccz,x,y)
-is_bodygyrox2<-cbind(is_bodygyrox,x,y)
-is_bodygyroy2<-cbind(is_bodygyroy,x,y)
-is_bodygyroz2<-cbind(is_bodygyroz,x,y)
-is_totalaccx2<-cbind(is_totalaccx,x,y)
-is_totalaccy2<-cbind(is_totalaccy,x,y)
-is_totalaccz2<-cbind(is_totalaccz,x,y)
-subject2<-cbind(subject,x,y)
+is_bodyaccx2<-cbind(is_bodyaccx,subject$mysubject,y$activityname)
+is_bodyaccy2<-cbind(is_bodyaccy,subject$mysubject,y$activityname)
+is_bodyaccz2<-cbind(is_bodyaccz,subject$mysubject,y$activityname)
+is_bodygyrox2<-cbind(is_bodygyrox,subject$mysubject,y$activityname)
+is_bodygyroy2<-cbind(is_bodygyroy,subject$mysubject,y$activityname)
+is_bodygyroz2<-cbind(is_bodygyroz,subject$mysubject,y$activityname)
+is_totalaccx2<-cbind(is_totalaccx,subject$mysubject,y$activityname)
+is_totalaccy2<-cbind(is_totalaccy,subject$mysubject,y$activityname)
+is_totalaccz2<-cbind(is_totalaccz,subject$mysubject,y$activityname)
+#subject2<-cbind(subject,x,y$activityname)
 
 
-#all_avg_per_act_per_sub<-ddply(is_bodyaccx2,.(x,y),numcolwise(mean))
+#all average/mean per activity per subject
+avg_is_bodyaccx2<-ddply(is_bodyaccx2,.(subject$mysubject,y$activityname),numcolwise(mean))
+avg_is_bodyaccy2<-ddply(is_bodyaccy2,.(subject$mysubject,y$activityname),numcolwise(mean))
+avg_is_bodyaccz2<-ddply(is_bodyaccz2,.(subject$mysubject,y$activityname),numcolwise(mean))
+avg_is_bodygyrox2<-ddply(is_bodygyrox2,.(subject$mysubject,y$activityname),numcolwise(mean))
+avg_is_bodygyroy2<-ddply(is_bodygyroy2,.(subject$mysubject,y$activityname),numcolwise(mean))
+avg_is_bodygyroz2<-ddply(is_bodygyroz2,.(subject$mysubject,y$activityname),numcolwise(mean))
+avg_is_totalaccx2<-ddply(is_totalaccx2,.(subject$mysubject,y$activityname),numcolwise(mean))
+avg_is_totalaccy2<-ddply(is_totalaccy2,.(subject$mysubject,y$activityname),numcolwise(mean))
+avg_is_totalaccz2<-ddply(is_totalaccz2,.(subject$mysubject,y$activityname),numcolwise(mean))
+
+
+
+
+
